@@ -31,41 +31,41 @@ const registerAndLogin = async (userProps = {}) => {
 describe('lazy-bouncer routes', () => {
 
 
-  it('is a dummy test to pass CI and return that sweet, sweet green check mark', async () => {
+  // it('is a dummy test to pass CI and return that sweet, sweet green check mark', async () => {
 
-    expect(true).toBeTruthy;
+  //   expect(true).toBeTruthy;
+  // });
+
+  beforeEach(() => {
+    return setup(pool);
   });
 
-  // beforeEach(() => {
-  //   return setup(pool);
-  // });
+  afterAll(() => {
+    pool.end();
+  });
 
-  // afterAll(() => {
-  //   pool.end();
-  // });
+  it('creates a new user', async () => {
+    const res = await request(app).post('/api/v1/users').send(mockUser);
+    const { firstName, lastName, email } = mockUser;
 
-  // it('creates a new user', async () => {
-  //   const res = await request(app).post('/api/v1/users').send(mockUser);
-  //   const { firstName, lastName, email } = mockUser;
+    expect(res.body).toEqual({
+      id: expect.any(String),
+      firstName,
+      lastName,
+      email,
+    });
+  });
 
-  //   expect(res.body).toEqual({
-  //     id: expect.any(String),
-  //     firstName,
-  //     lastName,
-  //     email,
-  //   });
-  // });
+  it('returns the current user', async () => {
+    const [agent, user] = await registerAndLogin();
+    const me = await agent.get('/api/v1/users/me');
 
-  // it('returns the current user', async () => {
-  //   const [agent, user] = await registerAndLogin();
-  //   const me = await agent.get('/api/v1/users/me');
-
-  //   expect(me.body).toEqual({
-  //     ...user.toJSON(),
-  //     exp: expect.any(Number),
-  //     iat: expect.any(Number),
-  //   });
-  // });
+    expect(me.body).toEqual({
+      ...user.toJSON(),
+      exp: expect.any(Number),
+      iat: expect.any(Number),
+    });
+  });
 
   // it('should return a 401 when signed out and listing all users', async () => {
   //   const res = await request(app).get('/api/v1/users');
