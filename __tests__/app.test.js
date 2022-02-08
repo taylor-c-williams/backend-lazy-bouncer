@@ -30,12 +30,6 @@ const registerAndLogin = async (userProps = {}) => {
 
 describe('lazy-bouncer routes', () => {
 
-
-  // it('is a dummy test to pass CI and return that sweet, sweet green check mark', async () => {
-
-  //   expect(true).toBeTruthy;
-  // });
-
   beforeEach(() => {
     return setup(pool);
   });
@@ -90,6 +84,6 @@ describe('lazy-bouncer routes', () => {
     const [agent, user] = await registerAndLogin({ email: 'admin' });
     const res = await agent.get('/api/v1/users');
 
-    expect(res.body).toEqual([{...user}]);
+    expect(res.body).toEqual([{ ...user }]);
   });
 });
